@@ -100,20 +100,148 @@ chennai-house-price-prediction/
 
 *Note: The structure above reflects the current repository layout. Additional files may exist in the repository.*
 
-## Machine Learning Workflow
+## Machine Learning Pipeline
 
-The project follows a structured workflow:
+The project follows an end-to-end machine learning pipeline, beginning with raw housing data and ending with a deployed prediction interface that runs locally through Docker.
 
-1. **Dataset Inspection:** Understand the dataset, its features, data types, and quality.
-2. **Data Cleaning:** Address inconsistencies and prepare the data for analysis.
-3. **Exploratory Data Analysis:** Examine distributions, outliers, and relationships between features and house prices.
-4. **Feature Engineering:** Transform and prepare features for machine learning.
-5. **Baseline Modeling:** Establish an initial performance benchmark.
-6. **Feature Selection:** Evaluate the contribution of input features.
-7. **Model Training and Tuning:** Train candidate models and tune hyperparameters.
-8. **Model Evaluation:** Compare model performance using appropriate regression metrics.
-9. **Application Development:** Integrate the selected model into a FastAPI backend and frontend.
-10. **Containerization and Testing:** Package the application with Docker and validate its functionality.
+### Pipeline Overview
+
+```text
+Raw Housing Dataset
+        |
+        v
+Dataset Inspection
+        |
+        v
+Data Cleaning
+        |
+        v
+Exploratory Data Analysis
+        |
+        v
+Feature Engineering
+        |
+        v
+Baseline Model
+        |
+        v
+Feature Selection
+        |
+        v
+Model Training and Hyperparameter Tuning
+        |
+        v
+Model Evaluation and Selection
+        |
+        v
+Save Trained Model
+        |
+        v
+FastAPI Prediction Backend
+        |
+        v
+Interactive Frontend
+        |
+        v
+PDF Prediction Report
+        |
+        v
+Docker Containerization
+```
+
+### 1. Dataset Inspection
+
+The initial stage examines the Chennai housing dataset to understand its structure, available features, data types, and overall data quality.
+
+This helps identify potential data quality issues before model development begins.
+
+### 2. Data Cleaning
+
+The raw dataset is cleaned to address inconsistencies, missing values, and other data quality problems.
+
+The objective is to prepare a consistent dataset for exploratory analysis and model development.
+
+### 3. Exploratory Data Analysis (EDA)
+
+Exploratory analysis is performed to investigate the distribution of house prices, understand relationships between property characteristics and prices, and identify potential outliers.
+
+Visualizations help reveal patterns that can inform subsequent preprocessing and modeling decisions.
+
+### 4. Feature Engineering
+
+Relevant housing attributes are prepared for machine learning.
+
+This stage transforms the available data into suitable model inputs while ensuring that the same expected feature structure can be provided during prediction.
+
+### 5. Baseline Modeling
+
+A baseline model establishes a reference point against which more advanced models can be evaluated.
+
+This helps determine whether subsequent modeling improvements provide measurable benefits over the initial benchmark.
+
+### 6. Feature Selection
+
+Feature selection identifies the input variables retained for model development.
+
+The selected features must remain consistent between model training and prediction time.
+
+### 7. Model Training and Hyperparameter Tuning
+
+Candidate regression models are trained on the prepared housing data.
+
+Hyperparameter tuning is used to search for suitable model configurations. The project includes a tuned Random Forest model as part of its modeling workflow.
+
+### 8. Model Evaluation and Selection
+
+Candidate models are evaluated using regression metrics, including:
+
+* **MAE:** Mean Absolute Error.
+* **MSE:** Mean Squared Error.
+* **RMSE:** Root Mean Squared Error.
+* **R² Score:** Coefficient of determination.
+
+These metrics provide complementary perspectives on prediction error and model fit.
+
+The final model should be selected based on the actual evaluation results and the project's modeling objectives.
+
+### 9. Model Persistence
+
+The trained model and other required artifacts are saved so that the application can load them without retraining the model whenever a prediction is requested.
+
+This separates model development from application inference.
+
+### 10. FastAPI Backend
+
+FastAPI provides the backend interface for receiving property details and returning price predictions.
+
+The backend validates incoming requests, loads the required model artifacts, performs inference, and returns a structured response.
+
+### 11. Interactive Frontend
+
+The frontend provides a user-facing interface where users can enter property details and request a price estimate.
+
+It communicates with the backend API and presents the prediction in a readable format.
+
+### 12. PDF Report Generation
+
+The application supports generating a downloadable PDF report containing prediction-related information.
+
+This provides a convenient way to retain the output of an individual prediction.
+
+### 13. Docker Containerization
+
+Docker packages the application and its dependencies into containers.
+
+Docker Compose coordinates the backend and frontend services, allowing the complete application to run locally without requiring the user to start each service separately.
+
+### End-to-End Prediction Flow
+
+When a user submits property details through the frontend, the application sends the request to the FastAPI backend. The backend validates the inputs, uses the saved model artifacts to generate a prediction, and returns the estimated price to the frontend.
+
+The frontend displays the result and provides access to the PDF report functionality.
+
+The application can be started locally using Docker Compose, making the project reproducible without requiring a cloud deployment.
+
 
 ## Model Evaluation
 
@@ -270,6 +398,20 @@ The `models/` directory contains serialized model-related artifacts used during 
 The application must load the correct model and supply features in the expected format. The saved artifacts should remain compatible with the corresponding preprocessing logic and library versions.
 
 Only load Joblib files from trusted sources because serialized Python objects can execute code when deserialized.
+
+## Application Screenshots
+
+### 1. House Price Estimator
+
+![House Price Estimator](screenshots/house-price-estimator.png)
+
+### 2. Prediction Results and PDF Report
+
+![Prediction Results](screenshots/prediction-results.png)
+
+### 3. FastAPI Swagger UI
+
+![FastAPI Swagger UI](screenshots/fastapi-swagger-ui.png)
 
 ## Dataset
 
