@@ -130,22 +130,83 @@ Actual evaluation results should be reported from the project's saved evaluation
 
 ## Getting Started
 
-### Prerequisites
+You can run the application with Docker (recommended) or run the backend and frontend directly with Python.
 
-Install the following tools before running the project:
+### Option A: Run with Docker (Recommended)
 
-- Python 3.12 or a compatible Python version
-- Git
-- Docker Desktop, if using containerized execution
+#### Prerequisites
 
-### 1. Clone the Repository
+- [Git](https://git-scm.com/downloads)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) on Windows/macOS, or Docker Engine with the Docker Compose plugin on Linux
+
+#### 1. Clone the repository
 
 ```bash
 git clone https://github.com/J-Dharanendiran/chennai-house-price-prediction.git
 cd chennai-house-price-prediction
 ```
 
-### 2. Create a Virtual Environment
+#### 2. Build and start the application
+
+Make sure Docker is running, then run this command from the project root:
+
+```bash
+docker compose up --build -d
+```
+
+Docker Compose builds the API and frontend images from the repository's `Dockerfile` and starts both services. The first build may take several minutes while Docker downloads the base image and installs dependencies.
+
+#### 3. Open the application
+
+- **Streamlit frontend:** http://localhost:8501
+- **FastAPI interactive documentation:** http://localhost:8000/docs
+
+The frontend connects to the API through the Docker Compose service network.
+
+#### 4. Check status and view logs
+
+Check whether both services are running:
+
+```bash
+docker compose ps
+```
+
+View logs from both services:
+
+```bash
+docker compose logs
+```
+
+To view logs for one service:
+
+```bash
+docker compose logs api
+docker compose logs frontend
+```
+
+#### 5. Stop the application
+
+```bash
+docker compose down
+```
+
+This stops and removes the Compose containers and network. It does not delete your source files.
+
+### Option B: Run Directly with Python
+
+#### Prerequisites
+
+- Python 3.12 or a compatible Python version
+- Git
+
+#### 1. Clone the repository
+
+```bash
+git clone https://github.com/J-Dharanendiran/chennai-house-price-prediction.git
+cd chennai-house-price-prediction
+```
+
+#### 2. Create and activate a virtual environment
 
 **Windows PowerShell**
 
@@ -156,71 +217,35 @@ python -m venv .venv
 
 If PowerShell blocks environment activation, consult the Python documentation for your execution-policy configuration rather than changing security settings unnecessarily.
 
-### 3. Install Dependencies
+#### 3. Install dependencies
 
 ```bash
 python -m pip install --upgrade pip
 pip install -r requirements.txt
-```
-
-If the frontend has additional dependencies, install them using:
-
-```bash
 pip install -r frontend/requirements.txt
 ```
 
-### 4. Run the Backend API
+#### 4. Start the backend API
 
-From the project root, start the FastAPI application:
+From the project root, run:
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-The default local development address is:
+The API is available at `http://127.0.0.1:8000`, and its interactive documentation is at `http://127.0.0.1:8000/docs`.
 
-`http://127.0.0.1:8000`
+#### 5. Start the frontend
 
-Open the interactive API documentation at:
-
-`http://127.0.0.1:8000/docs`
-
-The API provides an endpoint for checking application status and the endpoints implemented in `app/main.py`.
-
-### 5. Run the Frontend
-
-The frontend entry point is `frontend/app.py`. If it uses Streamlit, launch it with:
+Open a second terminal in the project root, activate the same virtual environment, and run:
 
 ```bash
 streamlit run frontend/app.py
 ```
 
-The local frontend address is typically:
+The frontend is typically available at `http://localhost:8501`.
 
-`http://localhost:8501`
-
-Install any frontend-specific dependencies before launching the interface. Run the backend as well if the frontend sends prediction requests to the API.
-
-### 6. Run with Docker
-
-Docker provides a reproducible way to package and run the application without manually recreating the Python environment on every machine.
-
-Ensure Docker Desktop is running, then execute:
-
-```bash
-docker compose up --build
-```
-
-Docker Compose uses the services, ports, and configuration defined in `docker-compose.yml`.
-
-To stop the application:
-
-```bash
-docker compose down
-```
-
-For individual container and port details, refer to the project's `Dockerfile` and `docker-compose.yml`.
-
+Ensure the frontend's API base URL is configured for your local backend when running outside Docker. The Docker Compose configuration uses `http://api:8000` for communication between containers; that service hostname is intended for the Compose network.
 ## Running Tests
 
 Run the test suite from the project root:
